@@ -41,3 +41,40 @@ def all_techniques(item_one, item_two, ignore_case = False):
                partial_ratio(item_one, item_two, ignore_case),
                token_sorted_ratio(item_one, item_two, ignore_case),
                token_set_ratio(item_one, item_two, ignore_case))
+
+
+#def get_best_scores(item_one, choices, limit, fn):
+#    def wrapped():
+#        match_scores = map(lambda x: (x, fn()(item_one,x)), choices)
+#        return sorted(match_scores, key = lambda x:x[1], reverse=True)[:limit]
+#    return wrapped
+
+#***This feels like it could use decorators
+#@get_best_scores(item_one, choices, limit)
+def best_match_ratio(item_one, choices, limit=1):
+    return get_best_scores(item_one, choices, limit, ratio)
+
+def best_match_partial(item_one, choices, limit=1):
+    return get_best_scores(item_one, choices, limit, partial_ratio)
+
+def best_match_token(item_one, choices, limit=1):
+    return get_best_scores(item_one, choices, limit, token_sorted_ratio)
+
+def best_match_token_set(item_one, choices, limit = 1):
+    return get_best_scores(item_one, choices, limit, token_set_ratio)
+
+
+def get_best_scores(item_one, choices, limit, match_function):
+    match_scores = map(lambda x: (x, match_function(item_one,x)), choices)
+    return sorted(match_scores, key = lambda x:x[1], reverse=True)[:limit]
+
+
+
+if __name__ == '__main__':
+    #print best_match_ratio('yankees', ['new york yankees', 'mets', 'knicks', 'rangers'])
+    #print best_match_partial('yankees', ['new york yankees', 'mets', 'knicks', 'rangers'], 3)
+    print best_match_token('yankees of new york', ['new york yankees', 'mets', 'knicks', 'rangers'], 3)
+
+
+
+
