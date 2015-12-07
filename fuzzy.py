@@ -42,6 +42,11 @@ def all_techniques(item_one, item_two, ignore_case = False):
                token_sorted_ratio(item_one, item_two, ignore_case),
                token_set_ratio(item_one, item_two, ignore_case))
 
+def avg_all_techniques(item_one, item_two, ignore_case = False):
+    return sum([ratio(item_one, item_two, ignore_case),
+               partial_ratio(item_one, item_two, ignore_case),
+               token_sorted_ratio(item_one, item_two, ignore_case),
+               token_set_ratio(item_one, item_two, ignore_case)])/4.0
 
 #def get_best_scores(item_one, choices, limit, fn):
 #    def wrapped():
@@ -63,6 +68,12 @@ def best_match_token(item_one, choices, limit=1):
 def best_match_token_set(item_one, choices, limit = 1):
     return get_best_scores(item_one, choices, limit, token_set_ratio)
 
+def best_match_all(item_one, choices, limit = 1):
+    return get_best_scores(item_one, choices, limit, all_techniques)
+
+def best_match_avg(item_one, choices, limit = 1):
+    return get_best_scores(item_one, choices, limit, avg_all_techniques)
+
 
 def get_best_scores(item_one, choices, limit, match_function):
     match_scores = map(lambda x: (x, match_function(item_one,x)), choices)
@@ -73,7 +84,9 @@ def get_best_scores(item_one, choices, limit, match_function):
 if __name__ == '__main__':
     #print best_match_ratio('yankees', ['new york yankees', 'mets', 'knicks', 'rangers'])
     #print best_match_partial('yankees', ['new york yankees', 'mets', 'knicks', 'rangers'], 3)
-    print best_match_token('yankees of new york', ['new york yankees', 'mets', 'knicks', 'rangers'], 3)
+    #print best_match_token('yankees of new york', ['new york yankees', 'mets', 'knicks', 'rangers'], 3)
+    print best_match_avg('yankees of new york', ['new york yankees', 'mets', 'knicks', 'rangers'], 3)
+
 
 
 
